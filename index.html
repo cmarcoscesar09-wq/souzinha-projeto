@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Interativo | Maratona Tech 2026</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+
+<div id="moderatorPanel" class="moderator-panel" hidden>
+  <div class="moderator-header">
+    <div>
+      <h2>🔐 Área do Moderador</h2>
+      <p>Ferramentas administrativas do dashboard.</p>
+    </div>
+    <button id="closeModeratorPanel" type="button">
+      Fechar ×
+    </button>
+  </div>
+
+  <div class="moderator-buttons">
+    <button id="moderatorNewResponse" type="button">
+      ➕ Nova resposta
+    </button>
+
+    <label class="admin-button">
+      📥 Importar CSV
+      <input id="moderatorCsvFile" type="file" accept=".csv,text/csv" hidden>
+    </label>
+
+    <button id="moderatorExportCsv" type="button">
+      📤 Exportar CSV
+    </button>
+
+    <button id="moderatorViewData" type="button">
+      📊 Ver / editar dados
+    </button>
+
+    <button id="moderatorRestoreExamples" type="button">
+      🔄 Restaurar exemplos
+    </button>
+  </div>
+
+  <p id="moderatorMessage" role="status"></p>
+</div>
+
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">◷</div>
+      <div>
+        <h1>TEMPO DE TELA</h1>
+        <div class="subtitle">Dashboard de investigação · Maratona Tech 2026</div>
+      </div>
+    </div>
+    <p>Tecnologia com equilíbrio: como usamos nossas telas no dia a dia?</p>
+  </header>
+
+  <main>
+    <section class="toolbar">
+      <div class="field">
+        <label for="ageFilter">Filtrar por faixa etária</label>
+        <select id="ageFilter">
+          <option value="">Todas as faixas</option>
+          <option>Até 14 anos</option>
+          <option>15 a 17 anos</option>
+          <option>18 a 24 anos</option>
+          <option>25 anos ou mais</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="useFilter">Filtrar por uso principal</label>
+        <select id="useFilter">
+          <option value="">Todos os usos</option>
+          <option>Estudos</option>
+          <option>Redes sociais</option>
+          <option>Jogos</option>
+          <option>Vídeos e música</option>
+        </select>
+      </div>
+
+      <button class="primary" id="addBtn">＋ Nova resposta</button>
+
+      <label class="file-label" for="csvFile">Importar CSV</label>
+      <input id="csvFile" type="file" accept=".csv,text/csv">
+      
+      <button id="moderatorTabBtn" type="button">🔐 Área do Moderador</button>
+      <button id="exportBtn">Exportar CSV</button>
+      <button id="dataBtn">Ver / editar dados</button>
+      <button id="themeBtn">☀️ / 🌙 Tema</button>
+      <button id="resetBtn">Restaurar exemplo</button>
+    </section>
+
+    <section class="stats">
+      <article class="stat">
+        <span class="label">Respostas no filtro</span>
+        <strong id="total">0</strong>
+        <small>Quantidade considerada</small>
+      </article>
+      <article class="stat">
+        <span class="label">Tempo médio por dia</span>
+        <strong id="average">0 h</strong>
+        <small>Estimativa pelas faixas informadas</small>
+      </article>
+      <article class="stat">
+        <span class="label">Uso acima de 4 h/dia</span>
+        <strong id="over4">0%</strong>
+        <small>Indicador descritivo, não diagnóstico</small>
+      </article>
+      <article class="stat">
+        <span class="label">Fazem pausas</span>
+        <strong id="breaks">0%</strong>
+        <small>Respondem “Sempre” ou “Às vezes”</small>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>01 · Tempo de tela por dia</h2>
+        <p>Distribuição das respostas por faixa de uso diário.</p>
+        <div id="timeChart" class="chart"></div>
+      </article>
+
+      <article class="card">
+        <h2>02 · Principal finalidade</h2>
+        <p>Para que os participantes mais usam as telas?</p>
+        <div id="useChart" class="chart"></div>
+      </article>
+
+      <article class="card">
+        <h2>03 · Pausas durante o uso</h2>
+        <p>Frequência de pausas relatada pelos participantes.</p>
+        <div id="breakChart" class="chart"></div>
+      </article>
+        
+      
+<article class="card">
+  <h2>04 · O que o uso excessivo de telas pode causar?</h2>
+  <p>
+    Passar muito tempo diante das telas pode contribuir para
+    dificuldades no sono, cansaço visual, falta de concentração
+    e sedentarismo. Por isso, é importante usar a tecnologia
+    com equilíbrio e fazer pausas durante o dia.
+  </p>
+
+  <div class="insight">
+    <strong>Você sabia?</strong>
+    <p>
+      O uso das telas, principalmente perto da hora de dormir,
+      pode atrapalhar o sono. Os efeitos variam de pessoa para pessoa.
+    </p>
+  </div>
+
+  <h3 class="screen-question">
+    Você acredita que o tempo excessivo de tela pode prejudicar
+    sua saúde e seu desempenho nos estudos?
+  </h3>
+
+</article>
+
+</article>
+
+      <article class="card">
+        <h2>Conclusão dos dados</h2>
+        <p>Resumo atualizado conforme os filtros selecionados.</p>
+        <div class="insight" id="insight" aria-live="polite"></div>
+        <p class="note">
+          Os dados do resumo acima, foi feito conforme as respostas
+          dadas pelos meus colegas de classe e algumas pessoas da escola.
+        </p>
+      </article>
+    </section>
+
+    <section class="card data-section" id="dataSection">
+      <div class="card-head">
+        <div>
+          <h2>Respostas da pesquisa</h2>
+          <p>Consulte, edite ou exclua registros.</p>
+        </div>
+        <button id="hideDataBtn">Ocultar tabela</button>
+      </div>
+
+      <div class="field search-field">
+        <label for="search">Buscar nas respostas</label>
+        <input id="search" placeholder="Digite uma faixa etária, uso ou pausa...">
+      </div>
+
+      <div class="table-wrap" id="tableWrap"></div>
+    </section>
+  </main>
+
+  <footer>
+    Tempo de Tela · Maratona Tech 2026 · Ferramenta educativa
+  </footer>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <form class="modal" id="responseForm">
+      <h2 id="modalTitle">Adicionar resposta</h2>
+      <p>Preencha as informações da pesquisa.</p>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="age">Faixa etária</label>
+          <select id="age" required>
+            <option>Até 14 anos</option>
+            <option selected>15 a 17 anos</option>
+            <option>18 a 24 anos</option>
+            <option>25 anos ou mais</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="hours">Tempo diário</label>
+          <select id="hours" required>
+            <option>Até 2 h</option>
+            <option>2–4 h</option>
+            <option selected>4–6 h</option>
+            <option>Mais de 6 h</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="purpose">Uso principal</label>
+          <select id="purpose" required>
+            <option>Estudos</option>
+            <option>Redes sociais</option>
+            <option>Jogos</option>
+            <option>Vídeos e música</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="pause">Faz pausas?</label>
+          <select id="pause" required>
+            <option>Sempre</option>
+            <option>Às vezes</option>
+            <option>Raramente</option>
+            <option>Nunca</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" id="cancelBtn">Cancelar</button>
+        <button class="primary" type="submit">Salvar resposta</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
